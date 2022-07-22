@@ -7,6 +7,45 @@ app = Chalice(app_name='backend')
 def index():
     return {'hello': 'world'}
 
+@app.route('/exercises')
+def list_exercises():
+    pass
+
+@app.route('/exercises/{uid}')
+def get_exercise(uid):
+    pass
+
+@app.route('/exercises', methods=['POST'])
+def create_exercise():
+    pass
+
+@app.route('/exercises/{uid}', methods=['PUT'])
+def update_exercise(uid):
+    pass
+
+@app.route('/exercises/{uid}', methods=['DELETE'])
+def delete_exercise(uid):
+    pass
+
+@app.route('/workouts')
+def list_workouts():
+    pass
+
+@app.route('/workouts/{uid}')
+def get_workout(uid):
+    pass
+
+@app.route('/workouts', methods=['POST'])
+def create_workout():
+    pass
+
+@app.route('/workouts/{uid}', methods=['PUT'])
+def update_workout(uid):
+    pass
+
+@app.route('/workouts/{uid}', methods=['DELETE'])
+def delete_workout(uid):
+    pass
 
 # The view function above will return {"hello": "world"}
 # whenever you make an HTTP GET request to '/'.
