@@ -1,0 +1,7 @@
+chalice
+pytest
+pytest-cov
+httpie
+black
+ipdb
+moto
