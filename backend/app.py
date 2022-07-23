@@ -3,6 +3,15 @@ from chalicelib import excersises_db
 
 
 app = Chalice(app_name="backend")
+_EXERCISESS_DB = None
+
+
+def get_exercises_db():
+    global _EXERCISESS_DB
+    # TODO: replace with DynamoDB table
+    if not _EXERCISESS_DB:
+        _EXERCISESS_DB = excersises_db.InMemoryExerciseDB()
+    return _EXERCISESS_DB
 
 
 @app.route("/")
@@ -12,27 +21,29 @@ def index():
 
 @app.route("/exercises")
 def list_exercises():
-    pass
+    return get_exercises_db().list_items()
 
 
 @app.route("/exercises/{uid}")
 def get_exercise(uid):
-    pass
+    return get_exercises_db().get_item(uid)
 
 
 @app.route("/exercises", methods=["POST"])
 def create_exercise():
-    pass
+    payload = app.current_request.json_body
+    return get_exercises_db().create_item(name=payload["name"])
 
 
 @app.route("/exercises/{uid}", methods=["PUT"])
 def update_exercise(uid):
-    pass
+    payload = app.current_request.json_body
+    return get_exercises_db().update_item(uid, name=payload["name"])
 
 
 @app.route("/exercises/{uid}", methods=["DELETE"])
 def delete_exercise(uid):
-    pass
+    return get_exercises_db().delete_item(uid)
 
 
 @app.route("/workouts")
