@@ -31,7 +31,7 @@ class InMemoryExerciseDB(ExerciseDB):
         return self._items.get(uid)
 
     def create_item(self, name):
-        uid = uuid4()
+        uid = str(uuid4())
         self._items[uid] = {"uid": uid, "name": name}
         return uid
 
