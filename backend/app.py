@@ -1,9 +1,10 @@
 from chalice import Chalice
-from chalicelib import excersises_db
 
+from chalicelib import excersises_db, workouts_db
 
 app = Chalice(app_name="backend")
 _EXERCISESS_DB = None
+_WORKOUTS_DB = None
 
 
 def get_exercises_db():
@@ -12,6 +13,14 @@ def get_exercises_db():
     if not _EXERCISESS_DB:
         _EXERCISESS_DB = excersises_db.InMemoryExerciseDB()
     return _EXERCISESS_DB
+
+
+def get_workouts_db():
+    global _WORKOUTS_DB
+    # TODO: replace with DynamoDB table
+    if not _WORKOUTS_DB:
+        _WORKOUTS_DB = workouts_db.InMemoryWorkoutsDB()
+    return _WORKOUTS_DB
 
 
 @app.route("/")
@@ -48,27 +57,37 @@ def delete_exercise(uid):
 
 @app.route("/workouts")
 def list_workouts():
-    pass
+    return get_workouts_db().list_items()
 
 
 @app.route("/workouts/{uid}")
 def get_workout(uid):
-    pass
+    return get_workouts_db().get_item(uid)
 
 
 @app.route("/workouts", methods=["POST"])
 def create_workout():
-    pass
+    payload = app.current_request.json_body
+    return get_workouts_db().create_item(
+        excercise_uid=payload["exercise_uid"],
+        weight=payload["weight"],
+        reps=payload["reps"],
+    )
 
 
 @app.route("/workouts/{uid}", methods=["PUT"])
 def update_workout(uid):
-    pass
+    payload = app.current_request.json_body
+    return get_workouts_db().update_item(
+        uid=uid,
+        weight=payload["weight"],
+        reps=payload["reps"],
+    )
 
 
 @app.route("/workouts/{uid}", methods=["DELETE"])
 def delete_workout(uid):
-    pass
+    return get_workouts_db().delete_item(uid)
 
 
 # The view function above will return {"hello": "world"}
